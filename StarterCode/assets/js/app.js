@@ -65,7 +65,7 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 function updateToolTip(chosenXAxis, circlesGroup) {
 
   if (chosenXAxis === "poverty") {
-    var label = "In Poverty (%)";
+    var label = "In Poverty - ";
   }
   else {
     var label = "Age (Median)";
@@ -76,20 +76,21 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 //   .classed("tooltip", true);
  
   var toolTip = d3.tip()
-    .attr("class", "tooltip")
+    .attr("class", "d3-tip")
     .offset([80, -60])
     .html(function(d) {
-      return (`${d.state}<br>${label} ${d[chosenXAxis]}`);
+      return (`${d.state}<br>${label} ${d[chosenXAxis]}%<br>Lacks Healthcare - ${d.healthcare}%`);
     });
 
   circlesGroup.call(toolTip);
 
+ 
   circlesGroup.on("mouseover", function(data) {
-    toolTip.show(data);
+    toolTip.show(data, this);
   })
     // onmouseout event
-    .on("mouseout", function(data, index) {
-      toolTip.hide(data);
+    circlesGroup.on("mouseout", function(data, index) {
+      toolTip.hide(data, this);
     });
 
   return circlesGroup;
